@@ -1,0 +1,12 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import routes from './routes/index.js';
+import { errorHandler } from './middleware/error.js';
+const app = express();
+app.use(helmet(), cors({ origin: process.env.CLIENT_URL || true }), express.json(), morgan('dev'));
+app.use('/api', routes);
+app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
+app.use(errorHandler);
+export default app;
